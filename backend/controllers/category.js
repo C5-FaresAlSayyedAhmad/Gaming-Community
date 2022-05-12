@@ -1,8 +1,33 @@
 const categoryModel = require("../models/category");
 
-const getAllCategories = (req, res) => {};
+const getAllCategories = (req, res) => {
+    categoryModel
+      .find({})
+      .populate("games","title -_id")
+      .then((category) => {
+        if (category.length) {
+          res.status(200).json({
+            success: true,
+            message: `All the Categories`,
+            category: category,
+            games: category.games,
+          });
+        } else {
+          res.status(200).json({
+            success: false,
+            message: `No Categories Yet`,
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(500).json({
+          success: false,
+          message: `Server Error`,
+          err: err.message,
+        });
+      });
+};
 
-const getCategory = (req, res) => {};
 
 const createCategory = (req, res) => {
   const { title, games } = req.body;
@@ -31,4 +56,4 @@ const createCategory = (req, res) => {
     });
 };
 
-module.exports = { getAllCategories, getCategory, createCategory };
+module.exports = { getAllCategories, createCategory };
