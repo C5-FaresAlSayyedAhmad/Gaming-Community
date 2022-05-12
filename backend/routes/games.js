@@ -1,7 +1,7 @@
 const express = require("express");
 
 // Import games controller
-const { getAllGames ,addNewPost , allGamePosts , getPostById ,updatePost ,deletePost } = require("../controllers/games");
+const { getAllGames ,addNewPost , allGamePosts , getPostById ,updatePost ,deletePost ,createGame } = require("../controllers/games");
 
 const gamesRouter = express.Router();
 
