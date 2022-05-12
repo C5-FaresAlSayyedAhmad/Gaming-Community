@@ -4,4 +4,7 @@ const getAllCategories = (req, res) => {};
 
 const getCategory = (req, res) => {};
 
-module.exports = { getAllCategories, getCategory };
+const createCategory = (req, res) => {};
+
+
+module.exports = { getAllCategories, getCategory ,createCategory };
