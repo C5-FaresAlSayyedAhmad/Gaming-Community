@@ -1,12 +1,20 @@
 const express = require("express");
 
-// Import games controller
-const { getAllCategories, getCategory } = require("../controllers/category");
+// Import category controller
+const { getAllCategories, getCategory , createCategory } = require("../controllers/category");
+
+// Import gamesRouter 
+const gamesRouter = require("./games");
 
 const categoryRouter = express.Router();
 
+// get request that will get all the categories
 categoryRouter.get("/", getAllCategories);
+// post request that create category
+categoryRouter.post("/", createCategory);
 
-categoryRouter.get("/:categoryid", getCategory);
+//categoryRouter will use the gamesRouter when the end point after /category will be /:categoryid
+categoryRouter.use("/:categoryid", gamesRouter);
+
 
 module.exports = categoryRouter;
