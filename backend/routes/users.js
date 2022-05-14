@@ -4,15 +4,15 @@ const express = require("express");
 const { register , userInfo, userPosts ,userFavGames ,addFavGames ,userComments} = require("../controllers/users");
 
 
-const usersRouter = express.Router();
+const usersRouter = express.Router({mergeParams:true});
 
-const usersIdRouter  = express.Router();
+const usersIdRouter  = express.Router({mergeParams:true});
 
 // post request the will create a new account for the user
 usersRouter.post("/", register);
 
 //usersRouter will use the usersIdRouter when the end point after /users will be /:userId
-usersRouter.use("/:userId" ,usersIdRouter)
+usersRouter.use("/:userid" ,usersIdRouter)
 
 // get request that will get the a specifec user infromation
 usersIdRouter.get("/", userInfo);

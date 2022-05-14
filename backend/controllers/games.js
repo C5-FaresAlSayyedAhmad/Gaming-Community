@@ -1,6 +1,7 @@
 const gamesModel = require("../models/games");
 const gamePostsModel = require("../models/gamePosts");
 const categoryModel = require("../models/category");
+const usersModel = require("../models/users");
 
 const getAllGames = (req, res) => {
   let id = req.params.categoryid;
@@ -69,14 +70,29 @@ const addNewPost = (req, res) => {
   newPost
     .save()
     .then((result) => {
+      console.log(usersModel.User);
       gamesModel
         .updateOne({ _id: gameId }, { $push: { gamePosts: result._id } })
         .then(() => {
-          res.status(201).json({
-            success: true,
-            message: `Post added`,
-            gamePosts: result,
-          });
+          usersModel
+            .updateOne(
+              { _id: req.token.userId },
+              { $push: { myPosts: result._id } }
+            )
+            .then(() => {
+              res.status(201).json({
+                success: true,
+                message: `Post added`,
+                gamePosts: result,
+              });
+            })
+            .catch((err) => {
+              res.status(500).json({
+                success: false,
+                message: `Server Error`,
+                err: err.message,
+              });
+            });
         })
         .catch((err) => {
           res.status(500).json({
@@ -178,7 +194,6 @@ const updatePost = (req, res) => {
 };
 
 const deletePost = (req, res) => {
-
   const id = req.params.postid;
   gamePostsModel
     .findByIdAndDelete(id)
@@ -201,7 +216,6 @@ const deletePost = (req, res) => {
         err: err.message,
       });
     });
-
 };
 
 const createGame = (req, res) => {
