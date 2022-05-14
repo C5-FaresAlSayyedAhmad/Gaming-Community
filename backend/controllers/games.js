@@ -55,7 +55,47 @@ const getAllGames = (req, res) => {
         });
 };
 
-const addNewPost = (req, res) => {};
+const addNewPost = (req, res) => {
+
+  const gameId = req.params.gameid;
+
+  const { title, description ,image } = req.body;
+  const newPost = new gamePostsModel({
+    title,
+    description,
+    image,
+    user: req.token.userId,
+  });
+
+  newPost
+  .save()
+  .then((result) => {
+    gamesModel
+      .updateOne({ _id: gameId }, { $push: { gamePosts: result._id } })
+      .then(() => {
+        res.status(201).json({
+          success: true,
+          message: `Post added`,
+          gamePosts: result,
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          success: false,
+          message: `Server Error`,
+          err: err.message,
+        });
+      });
+  })
+  .catch((err) => {
+    res.status(500).json({
+      success: false,
+      message: `Server Error`,
+      err: err.message,
+    });
+  });
+
+};
 
 const allGamePosts = (req, res) => {};
 
