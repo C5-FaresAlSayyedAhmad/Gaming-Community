@@ -13,9 +13,8 @@ categoryRouter.get("/", getAllCategories);
 // post request that create category
 categoryRouter.post("/", createCategory);
 
-
 //categoryRouter will use the gamesRouter when the end point after /category will be /:categoryid
-categoryRouter.use("/:categoryid", gamesRouter);
+categoryRouter.use("/:categoryid/games", gamesRouter);
 
 
 module.exports = categoryRouter;
