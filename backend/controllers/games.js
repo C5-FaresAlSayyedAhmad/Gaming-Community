@@ -177,7 +177,32 @@ const updatePost = (req, res) => {
     });
 };
 
-const deletePost = (req, res) => {};
+const deletePost = (req, res) => {
+
+  const id = req.params.postid;
+  gamePostsModel
+    .findByIdAndDelete(id)
+    .then((result) => {
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          message: `The Post: ${id} is not found`,
+        });
+      }
+      res.status(200).json({
+        success: true,
+        message: `Post deleted`,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+
+};
 
 const createGame = (req, res) => {
   const { title, description } = req.body;
