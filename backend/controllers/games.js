@@ -18,7 +18,7 @@ const getAllGames = (req, res) => {
           res.status(200).json({
             success: true,
             message: `The Category ${id} `,
-            article: result,
+            category: result,
           });
         })
         .catch((err) => {
@@ -97,9 +97,38 @@ const addNewPost = (req, res) => {
 
 };
 
-const allGamePosts = (req, res) => {};
+const allGamePosts = (req, res) => {
+  let id = req.params.gameid;
+  gamesModel
+  .findById(id)
+  .populate("gamePosts", "title -_id")
+  .then((result) => {
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: `The game is not found`,
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: `The Game ${id} `,
+      game: result,
+    });
+  })
+  .catch((err) => {
+    res.status(500).json({
+      success: false,
+      message: `Server Error`,
+      err: err.message,
+    });
+  }
 
-const getPostById = (req, res) => {};
+)};
+
+const getPostById = (req, res) => {
+
+  
+};
 
 const updatePost = (req, res) => {};
 
