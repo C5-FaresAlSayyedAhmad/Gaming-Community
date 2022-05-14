@@ -2,6 +2,7 @@ const express = require("express");
 
 // Import games controller
 const { getAllGames ,addNewPost , allGamePosts , getPostById ,updatePost ,deletePost ,createGame } = require("../controllers/games");
+const authentication = require("../middleware/authentication");
 
 const gamesRouter = express.Router({mergeParams:true});
 
@@ -18,7 +19,7 @@ gamesRouter.use("/:gameid", gamesIdRouter)
 
 
 // post request that will post a new post 
-gamesIdRouter.post("/", addNewPost);
+gamesIdRouter.post("/", authentication ,addNewPost);
 // post request that will get all the game posts
 gamesIdRouter.get("/", allGamePosts);
 
