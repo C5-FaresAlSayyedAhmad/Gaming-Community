@@ -17,7 +17,7 @@ const register = (req, res) => {
       res.status(201).json({
         success: true,
         message: `Account Created Successfully`,
-        author: result,
+        user: result,
       });
     })
     .catch((err) => {
@@ -42,7 +42,35 @@ const register = (req, res) => {
 
 };
 
-const userInfo = (req, res) => {};
+const userInfo = (req, res) => {
+
+ 
+  let id = req.params.userid
+  usersModel
+     .findById(id)    
+     .select("firstName lastName userName email -_id")
+     .then((result) => {
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          message: `The user is not found`,
+        });
+      }
+      res.status(200).json({
+        success: true,
+        message: `The User ${id} `,
+        user: result,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+
+};
 
 const userPosts = (req, res) => {};
 
