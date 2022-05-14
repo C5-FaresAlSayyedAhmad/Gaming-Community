@@ -1,4 +1,5 @@
 const usersModel = require("../models/users");
+const gamePostsModel = require("../models/gamePosts");
 
 const register = (req, res) => {
 
@@ -72,11 +73,42 @@ const userInfo = (req, res) => {
 
 };
 
-const userPosts = (req, res) => {};
+const userPosts = (req, res) => {
+
+  let id = req.params.userid;
+  gamePostsModel
+    .find({})
+    .where('user').equals(req.params.userid)
+    .select("title -_id")
+    .then((result) => {
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          message: `The user is not found`,
+        });
+      }
+      res.status(200).json({
+        success: true,
+        message: `The user ${id} `,
+        game: result,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+
+};
 
 const userFavGames = (req, res) => {};
 
-const addFavGames = (req, res) => {};
+const addFavGames = (req, res) => {
+
+  
+};
 
 const userComments = (req, res) => {};
 
