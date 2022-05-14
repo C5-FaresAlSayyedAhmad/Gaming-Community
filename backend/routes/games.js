@@ -25,7 +25,7 @@ gamesIdRouter.get("/", allGamePosts);
 
 
 //gamesIdRouter will use the postIdRouter when the end point after /:gamesId will be /:postId
-gamesIdRouter.use("/:postId", postIdRouter)
+gamesIdRouter.use("/posts/:postid", postIdRouter)
 
 // get request that will get a specifec post for a specifec game
 postIdRouter.get("/", getPostById);
