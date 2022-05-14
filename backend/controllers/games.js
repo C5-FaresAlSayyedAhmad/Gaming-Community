@@ -1,7 +1,59 @@
 const gamesModel = require("../models/games");
 const gamePostsModel = require("../models/gamePosts");
+const categoryModel = require("../models/category");
 
-const getAllGames = (req, res) => {};
+const getAllGames = (req, res) => {
+  let id = req.params.categoryid;
+  req.params.categoryid
+    ? categoryModel
+        .findById(id)
+        .populate("games", "title -_id")
+        .then((result) => {
+          if (!result) {
+            return res.status(404).json({
+              success: false,
+              message: `The category is not found`,
+            });
+          }
+          res.status(200).json({
+            success: true,
+            message: `The Category ${id} `,
+            article: result,
+          });
+        })
+        .catch((err) => {
+          res.status(500).json({
+            success: false,
+            message: `Server Error`,
+            err: err.message,
+          });
+        })
+    : gamesModel
+        .find({})
+        .populate("gamePosts", "title -_id")
+        .then((games) => {
+          if (games.length) {
+            res.status(200).json({
+              success: true,
+              message: `All the Games`,
+              games: games,
+              gamePosts: games.gamePosts,
+            });
+          } else {
+            res.status(200).json({
+              success: false,
+              message: `No Games Yet`,
+            });
+          }
+        })
+        .catch((err) => {
+          res.status(500).json({
+            success: false,
+            message: `Server Error`,
+            err: err.message,
+          });
+        });
+};
 
 const addNewPost = (req, res) => {};
 
