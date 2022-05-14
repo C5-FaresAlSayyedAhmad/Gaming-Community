@@ -149,7 +149,33 @@ const getPostById = (req, res) => {
     });
 };
 
-const updatePost = (req, res) => {};
+const updatePost = (req, res) => {
+  const id = req.params.postid;
+
+  gamePostsModel
+    .findByIdAndUpdate(id, req.body, { new: true })
+    .populate("user", "userName -_id")
+    .then((result) => {
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          message: `The Post: ${_id} is not found`,
+        });
+      }
+      res.status(202).json({
+        success: true,
+        message: `Post updated`,
+        post: result,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+};
 
 const deletePost = (req, res) => {};
 
