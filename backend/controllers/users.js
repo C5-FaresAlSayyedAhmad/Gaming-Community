@@ -201,7 +201,33 @@ const addFavGames = (req, res) => {
     });
 };
 
-const userComments = (req, res) => {};
+const userComments = (req, res) => {
+  let id = req.params.userid;
+  usersModel
+    .findById(id)
+    .select("commentLog -_id")
+    .populate("commentLog", "comment -_id")
+    .then((result) => {
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          message: `The user is not found`,
+        });
+      }
+      res.status(200).json({
+        success: true,
+        message: `The User ${id} `,
+        favGames: result,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+};
 
 module.exports = {
   register,
