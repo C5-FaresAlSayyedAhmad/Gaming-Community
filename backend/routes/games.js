@@ -1,4 +1,5 @@
 const express = require("express");
+const { createNewComment } = require("../controllers/comments");
 
 // Import games controller
 const { getAllGames ,addNewPost , allGamePosts , getPostById ,updatePost ,deletePost ,createGame } = require("../controllers/games");
@@ -29,9 +30,11 @@ gamesIdRouter.use("/posts/:postid", postIdRouter)
 
 // get request that will get a specifec post for a specifec game
 postIdRouter.get("/", getPostById);
+// post request that will create a new comment 
+postIdRouter.post("/comment",authentication, createNewComment)
 // put request that will update the post
-postIdRouter.put("/", updatePost);
+postIdRouter.put("/",authentication, updatePost);
 // delete request that will delete the post
-postIdRouter.delete("/", deletePost);
+postIdRouter.delete("/", authentication,deletePost);
 
 module.exports = gamesRouter;
