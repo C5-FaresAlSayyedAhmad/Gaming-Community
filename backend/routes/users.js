@@ -1,7 +1,8 @@
 const express = require("express");
 
 // Import users controller
-const { register , userInfo, userPosts ,userFavGames ,addFavGames ,userComments} = require("../controllers/users");
+const { register , userInfo, userPosts ,userFavGames ,addFavGames ,deleteFavGames , userComments} = require("../controllers/users");
+const authentication = require("../middleware/authentication");
 
 
 const usersRouter = express.Router({mergeParams:true});
@@ -15,14 +16,16 @@ usersRouter.post("/", register);
 usersRouter.use("/:userid" ,usersIdRouter)
 
 // get request that will get the a specifec user infromation
-usersIdRouter.get("/", userInfo);
+usersIdRouter.get("/", authentication,userInfo);
 // get request that will get all the posts for the user
-usersIdRouter.get("/posts", userPosts);
+usersIdRouter.get("/posts",authentication, userPosts);
 // get request that will get all the posts for the user
-usersIdRouter.get("/favgames ", userFavGames);
+usersIdRouter.get("/favgames",authentication ,userFavGames);
 // post request that will add favgames for the user 
-usersIdRouter.post("/favgames", addFavGames);
+usersIdRouter.post("/favgames", authentication,addFavGames);
+// delete request that will delete the favGame
+usersIdRouter.delete("/favgames", authentication,deleteFavGames);
 // get request that will get all the comments for the user
-usersIdRouter.get("/comments ", userComments);
+usersIdRouter.get("/comments", authentication ,userComments);
 
 module.exports = usersRouter;
