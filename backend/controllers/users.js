@@ -157,7 +157,49 @@ const deleteFavGames = (req, res) => {
     });
 };
 
-const addFavGames = (req, res) => {};
+const addFavGames = (req, res) => {
+  let userID = req.params.userid;
+  const { gameid } = req.body;
+
+  gamesModel
+    .findOne({ _id: gameid })
+    .then(() => {
+      usersModel
+        .findOne({ _id: userID })
+        .then((result) => {
+          if (result.favGames.includes(gameid)) {
+            res.status(500).json({
+              success: false,
+              message: `The Game is Already Added`,
+            });
+          } else {
+            result.favGames.push(gameid);
+            result.save("done");
+            res.status(201).json({
+              success: true,
+              message: `The Game is Added`,
+              favGames: result.favGames,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("Here1");
+          res.status(500).json({
+            success: false,
+            message: `Server Error`,
+            err: err.message,
+          });
+        });
+    })
+    .catch((err) => {
+      console.log("Here2");
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+};
 
 const userComments = (req, res) => {};
 
