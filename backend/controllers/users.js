@@ -125,7 +125,37 @@ const userFavGames = (req, res) => {
     });
 };
 
-const deleteFavGames = (req, res) => {};
+const deleteFavGames = (req, res) => {
+  let userID = req.params.userid;
+  const { gameid } = req.body;
+  usersModel
+    .findOne({ _id: userID })
+    .then((result) => {
+      if (result.favGames.includes(gameid)) {
+        const deletedIndex = result.favGames.indexOf(gameid);
+        result.favGames.splice(deletedIndex, 1);
+        result.save("done");
+        res.status(201).json({
+          success: true,
+          message: `The Game is Removed`,
+          favGames: result.favGames,
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: `The Game is not in there`,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log("Here1");
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
+};
 
 const addFavGames = (req, res) => {};
 
