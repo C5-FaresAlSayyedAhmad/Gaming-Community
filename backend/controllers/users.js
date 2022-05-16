@@ -1,8 +1,8 @@
 const usersModel = require("../models/users");
 const gamePostsModel = require("../models/gamePosts");
+const gamesModel = require("../models/games");
 
 const register = (req, res) => {
-
   const { firstName, lastName, userName, email, password } = req.body;
   const user = new usersModel({
     firstName,
@@ -27,8 +27,7 @@ const register = (req, res) => {
           success: false,
           message: `The email already exists`,
         });
-      }
-      else if (err.keyPattern.userName == 1) {
+      } else if (err.keyPattern.userName == 1) {
         return res.status(409).json({
           success: false,
           message: `The username is used please try a different one`,
@@ -40,17 +39,14 @@ const register = (req, res) => {
         err: err.message,
       });
     });
-
 };
 
 const userInfo = (req, res) => {
-
- 
-  let id = req.params.userid
+  let id = req.params.userid;
   usersModel
-     .findById(id)    
-     .select("firstName lastName userName email -_id")
-     .then((result) => {
+    .findById(id)
+    .select("firstName lastName userName email -_id")
+    .then((result) => {
       if (!result) {
         return res.status(404).json({
           success: false,
@@ -70,15 +66,14 @@ const userInfo = (req, res) => {
         err: err.message,
       });
     });
-
 };
 
 const userPosts = (req, res) => {
-
   let id = req.params.userid;
   gamePostsModel
     .find({})
-    .where('user').equals(req.params.userid)
+    .where("user")
+    .equals(req.params.userid)
     .select("title -_id")
     .then((result) => {
       if (!result) {
@@ -100,15 +95,39 @@ const userPosts = (req, res) => {
         err: err.message,
       });
     });
-
 };
 
-const userFavGames = (req, res) => {};
-
-const addFavGames = (req, res) => {
-
-  
+const userFavGames = (req, res) => {
+  let id = req.params.userid;
+  usersModel
+    .findById(id)
+    .select("favGames -_id")
+    .populate("favGames", "title -_id")
+    .then((result) => {
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          message: `The user is not found`,
+        });
+      }
+      res.status(200).json({
+        success: true,
+        message: `The User ${id} `,
+        favGames: result,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `Server Error`,
+        err: err.message,
+      });
+    });
 };
+
+const deleteFavGames = (req, res) => {};
+
+const addFavGames = (req, res) => {};
 
 const userComments = (req, res) => {};
 
@@ -118,5 +137,6 @@ module.exports = {
   userPosts,
   userFavGames,
   addFavGames,
+  deleteFavGames,
   userComments,
 };
