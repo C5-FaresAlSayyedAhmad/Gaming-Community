@@ -1,0 +1,16 @@
+.NavBar{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    background-color: blueviolet;
+}
+
+.LogReg {
+    display: flex;
+    flex-direction: row;
+    column-gap: 50px;
+    background-color: rgb(43, 189, 226);    
+    align-self: end;
+
+}
