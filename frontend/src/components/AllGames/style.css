@@ -1,0 +1,7 @@
+.games{
+    display: grid;
+    justify-items: center;   
+    align-items:center;
+    row-gap: 50px;
+    column-gap: 60px;
+}
