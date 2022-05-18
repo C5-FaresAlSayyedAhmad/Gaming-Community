@@ -8,7 +8,7 @@ const getAllGames = (req, res) => {
   req.params.categoryid
     ? categoryModel
         .findById(id)
-        .populate("games", "title -_id")
+        .populate("games", "title")
         .then((result) => {
           if (!result) {
             return res.status(404).json({
@@ -19,7 +19,7 @@ const getAllGames = (req, res) => {
           res.status(200).json({
             success: true,
             message: `The Category ${id} `,
-            category: result,
+            category: result.games,
           });
         })
         .catch((err) => {
@@ -70,16 +70,20 @@ const addNewPost = (req, res) => {
   newPost
     .save()
     .then((result) => {
-      console.log(usersModel.User);
+           
+      
       gamesModel
         .updateOne({ _id: gameId }, { $push: { gamePosts: result._id } })
         .then(() => {
+          req.token.gameid=gameId
+          console.log(req.token);
           usersModel
             .updateOne(
               { _id: req.token.userId },
               { $push: { myPosts: result._id } }
             )
             .then(() => {
+             
               res.status(201).json({
                 success: true,
                 message: `Post added`,
@@ -115,7 +119,7 @@ const allGamePosts = (req, res) => {
   let id = req.params.gameid;
   gamesModel
     .findById(id)
-    .populate("gamePosts", "title -_id")
+    .populate("gamePosts", "title")
     .then((result) => {
       if (!result) {
         return res.status(404).json({
@@ -143,6 +147,7 @@ const getPostById = (req, res) => {
   gamePostsModel
     .findById(id)
     .populate("user", "userName -_id")
+    .populate("comment","comment")
     .then((result) => {
       if (!result) {
         return res.status(404).json({
