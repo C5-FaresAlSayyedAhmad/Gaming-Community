@@ -10,12 +10,20 @@ const AuthProvider = (props) => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState("");
+  const [userId, setUserId] = useState("");
 
   // =================================================================
 
   const saveToken = (token) => {
     setToken(token);
     setIsLoggedIn(true);
+  };
+
+  // =================================================================
+
+  const saveUserId = (userId) => {
+    setUserId(userId);
+    
   };
 
   // =================================================================
@@ -47,6 +55,8 @@ const AuthProvider = (props) => {
     logout,
     saveToken,
     setIsLoggedIn,
+    userId,
+    saveUserId
   };
   // =================================================================
 

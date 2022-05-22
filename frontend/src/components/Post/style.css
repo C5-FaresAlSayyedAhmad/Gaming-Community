@@ -1,0 +1,43 @@
+.post{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+   
+    text-decoration: none;
+    font-family: Arial, Helvetica;
+}
+
+.postTitle1{
+   
+    text-decoration: none;
+    font-family: Arial, Helvetica;
+    font-size: 25px;
+}
+
+.commentClass{
+    display: flex;
+    flex-direction: row;
+    column-gap: 30px;
+
+}
+.commentBtn{
+  
+    transition: transform 0.2s;
+    background-color: rgb(32,34,37);
+}
+
+.commentBtn:hover{
+ 
+    cursor: pointer;
+    transform: scale(1.05);
+    
+}
+.comments{
+    text-decoration: none;
+    font-family: Arial, Helvetica;
+    font-size: 15px;
+}
+
+.commentBox::placeholder{
+
+}

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "./style.css";
 
 import axios from "axios";
@@ -8,25 +8,25 @@ import { AuthContext } from "../../contexts/authContext";
 //===============================================================
 
 const Game = () => {
-  const { token } = useContext(AuthContext);
-
+  const { token , userId , isLoggedIn} = useContext(AuthContext);
+  const history = useNavigate();
   const [game, setGame] = useState([]);
-  const [categoryId, setCategoryId] = useState("");
+ 
   const [show, setShow] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [updateBox, setUpdateBox] = useState(false);
   const [articleId, setArticleId] = useState(false);
   const [message, setMessage] = useState("");
-  const [userId, setUserId] = useState("");
   const [comment, setComment] = useState("");
   const id  = useParams()
+  const [favgameid, setfavgameid] = useState(id.gameid);
 
   //===============================================================
   
 
   const getCategoryGames = async () => {
-      console.log("id",id);
+      console.log("id Game Page",id);
     try {
       const res = await axios.get(`http://localhost:5000/category/${id.categoryid}/games/${id.gameid}`
     //   , {
@@ -39,11 +39,11 @@ const Game = () => {
       if (res.data.success) {
           
 
-        console.log("Res8",res.data.game);
+        console.log("Res Game",res.data.game);
         setGame(res.data.game);
         setMessage("");
         setShow(true);
-        setUserId(res.data.userId);        
+            
       } else throw Error;
     } catch (error) {
        
@@ -112,6 +112,33 @@ const Game = () => {
 
   //===============================================================
 
+  const addFav = async (id) => {
+    try {
+      
+      await axios.post(
+        `http://localhost:5000/users/${userId}/favgames`,
+        {
+          favgameid
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (!isLoggedIn) {
+        history("/login");
+      }
+   
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  //===============================================================
+
+
+
   useEffect(() => {
     getCategoryGames();
   }, []);
@@ -119,84 +146,48 @@ const Game = () => {
   //===============================================================
 
   return (
-    <div className="category">
-        <div  >{game.title}</div>    
-        <div  >{game.description}</div>  
+    <div className="gamePage">
+      <div className="GPimageContainer">
+      
+      <div className="GPimage"> <img
+                src={`${game.image}`}
+                alt={`${game.title}`}
+                width="220"
+                height="380"
+              ></img></div>
+             
+              </div>
+              <div className="mainContent">
+              <div className="titleGame" >  
+        {game.title}</div>  
+        <div className="description" >  
+        {game.description}</div> 
+        <div className="buttonsClass">
+        <Link className="LinK" to={`/games/${id.gameid}/addpost`}>
+          
+        <div><button>Add Post</button></div>
+        
+        </Link>
+        
+        {/* <div><button onClick={addFav}>Add Favourite</button></div> */}
+        </div> 
+        
       <br />
       {show &&
         game.gamePosts.map((post, index) => (           
             <div key={index} className="cat" >
-                <Link className="Link" to={`/category/${id.categoryid}/games/${id.gameid}/posts/${post._id}`}>
-            <div  >{post.title}</div>     
-            {/* <div>
-              {game.comments ? (
-                game.comments.map((comment, i) => {
-                  return (
-                    <p className="comment" key={i}>
-                      {comment.comment}
-                    </p>
-                  );
-                })
-              ) : (
-                <></>
-              )}
-            </div> */}
-            {/* {article.author === userId && (
-              <>
-                {updateBox && articleId === article._id && (
-                  <form>
-                    <br />
-                    <input
-                      type="text"
-                      defaultValue={article.title}
-                      placeholder="article title here"
-                      onChange={(e) => setTitle(e.target.value)}
-                    />
-                    <br />
+             
+                <Link className="postLink" to={`/games/${id.gameid}/posts/${post._id}`}>
+            <div className="postName" ><p className="postTitle">{post.title}</p></div>     
 
-                    <textarea
-                      placeholder="article description here"
-                      defaultValue={article.description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    ></textarea>
-                  </form>
-                )}
-                <button
-                  className="delete"
-                  onClick={() => deleteArticle(article._id)}
-                >
-                  X
-                </button>
-                <button
-                  className="update"
-                  onClick={() => handleUpdateClick(article)}
-                >
-                  Update
-                </button>
-              </>
-            )}
-            <div>
-              <textarea
-                className="commentBox"
-                placeholder="comment..."
-                onChange={(e) => {
-                  setComment(e.target.value);
-                }}
-              />
-              <button
-                className="commentBtn"
-                onClick={() => {
-                  addComment(article._id);
-                }}
-              >
-                Add comment
-              </button>
-            </div> */}
+          
             </Link>
+            
           </div>
        
         ))
         }
+        </div>
       {message && <div>{message}</div>}
     </div>
   );

@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import React, { useState, createContext } from "react";
 
 import './App.css';
 import Register from "./components/Register";
@@ -10,6 +9,9 @@ import Categories from "./components/AllCategories";
 import Category from "./components/Category";
 import Game from "./components/Game";
 import Post from "./components/Post";
+import Profile from "./components/Profile";
+import UserPosts from "./components/UserPosts";
+import AddNewPost from "./components/AddNewPost";
 
 
 function App() {
@@ -28,6 +30,10 @@ function App() {
         <Route path="/games/:gameid"  element={<Game />} />
         <Route path="/category/:categoryid/games/:gameid/posts/:postid"  element={<Post />} />
         <Route path="/games/:gameid/posts/:postid"  element={<Post />} />
+        <Route path="/user/:userid" element={<Profile />} />
+        <Route path="/user/:userid/posts" element={<UserPosts />} />
+        <Route path="/games/:gameid/addpost" element={<AddNewPost />} />
+
       </Routes>
      
       
