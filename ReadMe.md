@@ -1,13 +1,13 @@
 <p align="center">
   <a href="" rel="noopener">
- <img width=200px height=200px src="https://i.imgur.com/6wj0hh6.jpg" alt="Project logo"></a>
+ <img width=200px height=200px src="https://res.cloudinary.com/faresmerakproject4/image/upload/v1653183119/project_4/Icons/dizzy_4_s6dgte.png" alt="Project logo"></a>
 </p>
 
-<h3 align="center">Project Title</h3>
+<h3 align="center">Vertigo</h3>
 
 ---
 
-<p align="center"> Few lines describing your project.
+<p align="center"> gaming community website where people discuss articles about their favorite games as they can check the games in the website and create a new post and comment on the post 
     <br> 
 </p>
 
@@ -21,41 +21,37 @@
 
 ## 🧐 About <a name = "about"></a>
 
-Write about 1-2 paragraphs describing the purpose of your project.
-
+the purpose of the project is for the gaming communty to share their opinion between each other in order to discuss topics about the game as they can give advices and instructions about the games 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them.
-
-```
-Give examples
+Visual Studio code follow the link to install https://code.visualstudio.com/download
+Git Bash follow the link to install https://git-scm.com/downloads
+MongoDB follow the link to install https://www.mongodb.com/try/download/community
+Node.js follow the link to install https://nodejs.org/en/download/
 ```
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running.
+1-clone the repo to your local machine using git bash
+git clone"https://github.com/C5-FaresAlSayyedAhmad/MERAKI_Academy_Project_4.git"
 
-Say what the step will be
+2-Install packages repeat this step in the backend and the frontend folder
+npm i
 
-```
-Give the example
-```
+3-run the server by using the git bash inside backend folder
+npm run dev
 
-And repeat
+4-run the application by using the git bash inside frontend folder
+npm run start
 
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo.
 
 ## 🎈 Usage <a name="usage"></a>
 
-Add notes about how to use the system.
+-You can view all the games available on the website from the Home button and you also can veiw the games by the category by pressing on the category button in order to post or comment you will need to register and login as you can only remove or update the post you only posted 
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
