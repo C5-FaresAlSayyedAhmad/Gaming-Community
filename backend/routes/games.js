@@ -33,8 +33,8 @@ postIdRouter.get("/", getPostById);
 // post request that will create a new comment 
 postIdRouter.post("/comment",authentication, createNewComment)
 // put request that will update the post
-postIdRouter.put("/",authentication, updatePost);
+postIdRouter.put("/", updatePost);
 // delete request that will delete the post
-postIdRouter.delete("/", authentication,deletePost);
+postIdRouter.delete("/", deletePost);
 
 module.exports = gamesRouter;

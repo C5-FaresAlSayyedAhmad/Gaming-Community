@@ -29,10 +29,12 @@ const getAllCategories = (req, res) => {
 };
 
 const createCategory = (req, res) => {
-  const { title, games } = req.body;
+  const { title, image , games} = req.body;
   const category = new categoryModel({
     title,
-    games,
+    image,
+    games
+    
   });
 
   category

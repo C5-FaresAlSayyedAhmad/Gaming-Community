@@ -8,7 +8,7 @@ const getAllGames = (req, res) => {
   req.params.categoryid
     ? categoryModel
         .findById(id)
-        .populate("games", "title")
+        .populate("games", "title image")
         .then((result) => {
           if (!result) {
             return res.status(404).json({
@@ -17,8 +17,10 @@ const getAllGames = (req, res) => {
             });
           }
           res.status(200).json({
-            success: true,
+            success: "true",
             message: `The Category ${id} `,
+            categoryName: result.title,
+            categoryImage: result.image,
             category: result.games,
           });
         })
@@ -146,8 +148,12 @@ const getPostById = (req, res) => {
   let id = req.params.postid;
   gamePostsModel
     .findById(id)
-    .populate("user", "userName -_id")
-    .populate("comment","comment")
+    .populate("user", "userName _id")
+    .populate({
+      path: 'comments',
+      // Get friends of friends - populate the 'friends' array for every friend
+      populate: { path: 'commenter' , select: 'userName'}
+    })
     .then((result) => {
       if (!result) {
         return res.status(404).json({
@@ -159,6 +165,9 @@ const getPostById = (req, res) => {
         success: true,
         message: `The Post ${id} `,
         post: result,
+        username:result.user.userName,
+        userid:result.user._id,
+         
       });
     })
     .catch((err) => {
@@ -224,10 +233,11 @@ const deletePost = (req, res) => {
 };
 
 const createGame = (req, res) => {
-  const { title, description } = req.body;
+  const { title, description ,image } = req.body;
   const game = new gamesModel({
     title,
     description,
+    image
   });
 
   game

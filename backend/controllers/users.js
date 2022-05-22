@@ -42,20 +42,28 @@ const register = (req, res) => {
 };
 
 const userInfo = (req, res) => {
-  let id = req.params.userid;
+  // let id = req.params.userid;
+  let userID = req.params.userid;
   usersModel
-    .findById(id)
-    .select("firstName lastName userName email -_id")
+    .findById(userID)
+    .select("firstName lastName userName email")
     .then((result) => {
-      if (!result) {
+      if (!result ) {
         return res.status(404).json({
           success: false,
           message: `The user is not found`,
         });
       }
+
+      if(req.token.userId != userID ){
+        return res.status(404).json({
+          success: false,
+          message: `not allowed`,
+        });
+      }
       res.status(200).json({
         success: true,
-        message: `The User ${id} `,
+        message: `The User ${userID} `,
         user: result,
       });
     })
@@ -85,7 +93,7 @@ const userPosts = (req, res) => {
       res.status(200).json({
         success: true,
         message: `The user ${id} `,
-        game: result,
+        posts: result,
       });
     })
     .catch((err) => {
@@ -127,12 +135,12 @@ const userFavGames = (req, res) => {
 
 const deleteFavGames = (req, res) => {
   let userID = req.params.userid;
-  const { gameid } = req.body;
+  const { favgameid } = req.body;
   usersModel
     .findOne({ _id: userID })
     .then((result) => {
-      if (result.favGames.includes(gameid)) {
-        const deletedIndex = result.favGames.indexOf(gameid);
+      if (result.favGames.includes(favgameid)) {
+        const deletedIndex = result.favGames.indexOf(favgameid);
         result.favGames.splice(deletedIndex, 1);
         result.save("done");
         res.status(201).json({
@@ -159,26 +167,27 @@ const deleteFavGames = (req, res) => {
 
 const addFavGames = (req, res) => {
   let userID = req.params.userid;
-  const { gameid } = req.body;
+  const { favgameid } = req.body;
 
   gamesModel
-    .findOne({ _id: gameid })
+    .findOne({ _id: favgameid })
     .then(() => {
       usersModel
         .findOne({ _id: userID })
         .then((result) => {
-          if (result.favGames.includes(gameid)) {
+          if (result.favGames.includes(favgameid)) {
             res.status(500).json({
               success: false,
               message: `The Game is Already Added`,
             });
           } else {
-            result.favGames.push(gameid);
+            console.log(favgameid);
+            result.favGames.push(favgameid);
             result.save("done");
             res.status(201).json({
               success: true,
               message: `The Game is Added`,
-              favGames: result.favGames,
+              favGames: result,
             });
           }
         })
